@@ -1,0 +1,17 @@
+services:
+  backend:
+    container_name: backend
+    image: node:18-alpine
+    build:
+      context: .
+    command: sh -c "npm i"
+    volumes:
+      - ./:/usr/src/app
+    environment:
+      - PORT=8084
+    ports:
+      - 8084:8084
+
+  database:
+    container_name: database
+    image: mysql
