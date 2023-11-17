@@ -1,17 +1,36 @@
+version: "3"
 services:
   backend:
     container_name: backend
     image: node:18-alpine
-    build:
-      context: .
-    command: sh -c "npm i"
+    # build: ./
+    working_dir: /
     volumes:
-      - ./:/usr/src/app
-    environment:
-      - PORT=8084
+      - ./:/usr/src
     ports:
       - 8084:8084
+    command: sh -c "npm i  && npm start"
+    depends_on:
+      - mysql-db
+    environment:
+      NODE_ENV: development
+      MYSQL_HOST: mysql-db
+      MYSQL_PORT: 8085
+      MYSQL_USER: root
+      MYSQL_PASSWORD: 2315469
+      MYSQL_DATABASE: sistemadeestoque
 
-  database:
-    container_name: database
+  mysql-db:
+    container_name: mysql-db
     image: mysql
+    volumes:
+      - mysql-data:/var/lib/mysql
+    ports:
+      - "8085:8085"
+    environment:
+      MYSQL_USER: root
+      MYSQL_ROOT_PASSWORD: 2315469
+      MYSQL_DATABASE: sistemadeestoque
+
+volumes:
+  mysql-data:
