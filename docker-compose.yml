@@ -1,16 +1,26 @@
 version: "3"
 services:
+  mysql-db:
+    container_name: mysql-db
+    image: mysql:latest
+    volumes:
+      - ./:/var/lib/mysql-db
+    environment:
+      MYSQL_USER: user
+      MYSQL_ROOT_PASSWORD: 2315469
+      MYSQL_PASSWORD: 2315469
+      MYSQL_DATABASE: sistemadeestoque
+      
   backend:
     container_name: backend
     image: node:18-alpine
-    build: .
     working_dir: /usr/src/app
     volumes:
-      - ./:/usr/src/app
+      - ./backend:/usr/src/app
       - /usr/src/app/node_modules
     ports:
       - 8084:8084
-    command: sh -c "npm i  && npm start"
+    command: sh -c "npm i  && npm run start-test"
     depends_on:
       - mysql-db
     environment:
@@ -18,21 +28,7 @@ services:
       MYSQL_HOST: mysql-db
       MYSQL_PORT: 8085
       MYSQL_USER: root
-      MYSQL_ROOT_PASSWORD: 2315469
       MYSQL_PASSWORD: 2315469
-      MYSQL_DATABASE: sistemadeestoque
-
-  mysql-db:
-    container_name: mysql-db
-    image: mysql
-    volumes:
-      - ./:/var/lib/mysql-db
-    ports:
-      - "8085:8085"
-    environment:
-      MYSQL_USER: user
-      MYSQL_PASSWORD: 2315469
-      MYSQL_ROOT_PASSWORD: 2315469
       MYSQL_DATABASE: sistemadeestoque
 
 volumes:
