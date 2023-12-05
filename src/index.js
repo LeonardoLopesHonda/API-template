@@ -2,32 +2,40 @@
 
 const app = require("express")();
 const port = process.env.PORT || 8084;
+
 const handlebars = require('express-handlebars');
-const Sequelize = require('sequelize');
+const bodyParser = require('body-parser');
+const User = require("../models/Users")
 
 // Config
-  // Template Engine
-    app.engine('handlebars', handlebars.engine({ defaultLayout: "main" }));
-    app.set('view engine', 'handlebars');
 
-  // Database Connection
-    const database = new Sequelize('sistemadeestoque', 'root', '2315469', {
-      host: "localhost",
-      dialect: 'mysql'
-    });
+// Template Engine
+app.engine('handlebars', handlebars.engine({ defaultLayout: "main" }));
+app.set('view engine', 'handlebars');
 
-  // Routes
-    app.get("/", (req, res) => {
-      res.send({ message: "Up" });
-    });
+// Body Parser
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
-    app.get("/registerForm", (req, res) => {
-      res.render('form');
-    });
+// Routes
+app.get("/", (req, res) => {
+  res.send({ message: "Up" });
+});
 
-    app.post("/registerUser", (req, res) => {
-      res.send('Sucessfully Registered');
-    });
+app.get("/registerForm", (req, res) => {
+  res.render('form');
+});
+
+app.post("/registerUser", (req, res) => {
+  User.create({
+    nome: req.body.nome,
+    senha: req.body.senha
+  }).then(() => {
+    res.send("User sucessfullty created!");
+  }).catch((error) => {
+    res.send(`User could not be created! Error: ${error}`);
+  })
+});
 
 app.listen(port, () => {
   console.log(`Servidor Rodando na url: http://localhost:${port}`);

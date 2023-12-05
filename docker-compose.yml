@@ -11,16 +11,16 @@ services:
       MYSQL_PASSWORD: 2315469
       MYSQL_DATABASE: sistemadeestoque
       
-  backend:
-    container_name: backend
+  node:
+    container_name: node
     image: node:18-alpine
     working_dir: /usr/src/app
     volumes:
-      - ./backend:/usr/src/app
+      - ./:/usr/src/app
       - /usr/src/app/node_modules
     ports:
       - 8084:8084
-    command: sh -c "npm i  && npm run start-test"
+    command: sh -c "npm i  && npm run start"
     depends_on:
       - mysql-db
     environment:

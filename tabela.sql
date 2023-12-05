@@ -1,4 +1,4 @@
-CREATE TABLE usuarios (
+CREATE TABLE IF NOT EXISTS usuarios (
     nome VARCHAR(20),
     senha VARCHAR(6)
 );
