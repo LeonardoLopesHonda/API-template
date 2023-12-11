@@ -19,7 +19,10 @@ app.use(bodyParser.json());
 
 // Routes
 app.get("/", (req, res) => {
-  res.send({ message: "Up" });
+  User.all().then((users) => {
+    console.log(users);
+    res.render('home', { users: users });
+  });
 });
 
 app.get("/registerForm", (req, res) => {
@@ -31,7 +34,7 @@ app.post("/registerUser", (req, res) => {
     nome: req.body.nome,
     senha: req.body.senha
   }).then(() => {
-    res.send("User sucessfullty created!");
+    res.redirect("/");
   }).catch((error) => {
     res.send(`User could not be created! Error: ${error}`);
   })

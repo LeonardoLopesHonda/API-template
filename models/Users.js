@@ -11,23 +11,8 @@ const User = database.define('User', {
     }
 });
 
-// async function createUsers() {
-//     let user;
-
-//     user = await User.create({
-//         nome: "Leonardo",
-//         senha: "654321"
-//     })
-
-//     user = await User.create({
-//         nome: "Matheus",
-//         senha: "987654"
-//     })
-
-//     user = await User.create({
-//         nome: "Rodrigo",
-//         senha: "123456"
-//     })
-// }
+User.all = async function () {
+    return this.findAll();
+};
 
 module.exports = User;
