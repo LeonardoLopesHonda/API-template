@@ -5,7 +5,7 @@ const port = process.env.PORT || 8084;
 
 const handlebars = require('express-handlebars');
 const bodyParser = require('body-parser');
-const User = require("../models/Users")
+const User = require("../models/User");
 
 // Config
 
@@ -18,11 +18,14 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 // Routes
-app.get("/", (req, res) => {
-  User.all().then((users) => {
-    console.log(users);
+app.get("/", async (req, res) => {
+  try {
+    const users = await User.all();
     res.render('home', { users: users });
-  });
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    res.status(500).send("Internal Server Error");
+  }
 });
 
 app.get("/registerForm", (req, res) => {
