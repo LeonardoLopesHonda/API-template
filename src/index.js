@@ -43,6 +43,16 @@ app.post("/registerUser", (req, res) => {
   })
 });
 
+app.get("/delete/:id", (req, res) => {
+  User.destroy({ where: { 'id': req.params.id } })
+    .then(() => {
+      res.send("User deleted sucessfully");
+    })
+    .catch((error) => {
+      res.send(`Cannot delete user. ERROR: ${error}`);
+    })
+})
+
 app.listen(port, () => {
   console.log(`Servidor Rodando na url: http://localhost:${port}`);
 });
