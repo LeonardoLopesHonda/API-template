@@ -44,9 +44,10 @@ app.post("/registerUser", (req, res) => {
 });
 
 app.get("/delete/:id", (req, res) => {
+  // DELETE FROM users WHERE 'id' = id
   User.destroy({ where: { 'id': req.params.id } })
     .then(() => {
-      res.send("User deleted sucessfully");
+      res.render("layouts/delete");
     })
     .catch((error) => {
       res.send(`Cannot delete user. ERROR: ${error}`);
