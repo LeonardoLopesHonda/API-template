@@ -6,6 +6,7 @@ const port = process.env.PORT || 8084;
 const handlebars = require('express-handlebars');
 const bodyParser = require('body-parser');
 const User = require("../models/User");
+const Product = require("../models/Product");
 
 // Config
 
@@ -18,15 +19,55 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 // Routes
-app.get("/", async (req, res) => {
+app.get("/", (req, res) => {
+  res.render("home");
+});
+
+app.get("/users", async (req, res) => {
   try {
     const users = await User.all();
-    res.render('home', { users: users });
+    res.render('users', { users: users });
   } catch (error) {
     console.error("Error fetching users:", error);
     res.status(500).send("Internal Server Error");
   }
 });
+
+app.get("/products", async (req, res) => {
+  try {
+    const PRODUCT_DATA = await Product.all();
+    res.render('products', { products: PRODUCT_DATA });
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+app.get("/registerProductForm", (req, res) => {
+  res.render('productsForm');
+});
+
+app.post("/registerProducts", (req, res) => {
+  Product.create({
+    nome: req.body.nome,
+    preco: req.body.preco,
+    quantidade: req.body.quantidade
+  }).then(() => {
+    res.redirect("/");
+  }).catch((error) => {
+    res.send(`Product could not be registered! Error: ${error}`);
+  })
+});
+
+app.get("/delete/:id", (req, res) => {
+  Product.destroy({ where: { 'id': req.params.id } })
+    .then(() => {
+      res.render("layouts/delete");
+    })
+    .catch((error) => {
+      res.send(`Cannot delete Product. ERROR: ${error}`);
+    })
+})
 
 app.get("/registerForm", (req, res) => {
   res.render('form');

@@ -1,0 +1,90 @@
+<section>
+    <h1>See wich products were registered:</h1>
+    {{#each products}}
+    <div class="row">
+        <div>
+            <h1>{{nome}}</h1>
+            <div class="info">
+                <span><b>Qnt.</b>{{quantidade}}</span>
+                <span><b>R$ </b>{{preco}},00</span>
+            </div>
+        </div>
+        <div class="group-buttons">
+            <a href="/delete/{{id}}"><button class="delete">Excluir</button></a>
+        </div>
+    </div>
+    {{/each}}
+    <a class="form" href="/registerProductForm">Form</a>
+</section>
+<style>
+    section {
+        width: 90vw;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: auto;
+        margin-top: 5rem;
+    }
+
+    .row {
+        width: 100%;
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 4rem;
+    }
+
+    .group-buttons {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+    }
+
+    .delete {
+        padding: 1rem;
+        color: white;
+        border-radius: 10px;
+        background-color: red;
+
+        transition: all 500ms;
+    }
+
+    .delete:hover {
+        cursor: pointer;
+        border-radius: 0px;
+        background-color: #bf0000;
+    }
+
+    .form {
+        margin-top: 1rem;
+
+        font-size: x-large;
+        font-family: 'Times New Roman', Times, serif;
+        text-decoration: none;
+        color: black;
+
+        padding: 1.15rem;
+        padding-right: 1.5rem;
+        padding-left: 1.5rem;
+        border: 1px solid #2c282c;
+        border-radius: 10px;
+
+        transition: all 500ms,
+            color 800ms 150ms;
+    }
+
+    .form:hover {
+        border: none;
+        border-radius: 0px;
+        background: #000;
+        color: white;
+    }
+
+    .info {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 2rem;
+    }
+</style>
