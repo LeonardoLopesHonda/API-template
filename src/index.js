@@ -19,10 +19,17 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 // Routes
+// Home
 app.get("/", (req, res) => {
   res.render("home");
 });
 
+// Form
+app.get("/registerForm", (req, res) => {
+  res.render('form');
+});
+
+// Users
 app.get("/users", async (req, res) => {
   try {
     const users = await User.all();
@@ -33,6 +40,29 @@ app.get("/users", async (req, res) => {
   }
 });
 
+app.get("/delete/:id", (req, res) => {
+  // DELETE FROM users WHERE 'id' = id
+  User.destroy({ where: { 'id': req.params.id } })
+    .then(() => {
+      res.render("layouts/delete");
+    })
+    .catch((error) => {
+      res.send(`Cannot delete user. ERROR: ${error}`);
+    })
+})
+
+app.post("/registerUser", (req, res) => {
+  User.create({
+    nome: req.body.nome,
+    senha: req.body.senha
+  }).then(() => {
+    res.redirect("/users");
+  }).catch((error) => {
+    res.send(`User could not be created! Error: ${error}`);
+  })
+});
+
+// Products
 app.get("/products", async (req, res) => {
   try {
     const PRODUCT_DATA = await Product.all();
@@ -53,7 +83,7 @@ app.post("/registerProducts", (req, res) => {
     preco: req.body.preco,
     quantidade: req.body.quantidade
   }).then(() => {
-    res.redirect("/");
+    res.redirect("/products");
   }).catch((error) => {
     res.send(`Product could not be registered! Error: ${error}`);
   })
@@ -66,32 +96,6 @@ app.get("/delete/:id", (req, res) => {
     })
     .catch((error) => {
       res.send(`Cannot delete Product. ERROR: ${error}`);
-    })
-})
-
-app.get("/registerForm", (req, res) => {
-  res.render('form');
-});
-
-app.post("/registerUser", (req, res) => {
-  User.create({
-    nome: req.body.nome,
-    senha: req.body.senha
-  }).then(() => {
-    res.redirect("/");
-  }).catch((error) => {
-    res.send(`User could not be created! Error: ${error}`);
-  })
-});
-
-app.get("/delete/:id", (req, res) => {
-  // DELETE FROM users WHERE 'id' = id
-  User.destroy({ where: { 'id': req.params.id } })
-    .then(() => {
-      res.render("layouts/delete");
-    })
-    .catch((error) => {
-      res.send(`Cannot delete user. ERROR: ${error}`);
     })
 })
 
